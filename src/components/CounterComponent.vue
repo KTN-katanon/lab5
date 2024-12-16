@@ -10,14 +10,19 @@ import { ref, onMounted } from 'vue'
 const props = defineProps<{
   num: number
 }>()
-onMounted(()=>{
+const emit = defineEmits<{
+  update: [num: number]
+}>()
+onMounted(() => {
   data.value = props.num
 })
 const data = ref(2)
-const inc = function(){
+const inc = function () {
   data.value++
+  emit('update', data.value)
 }
 const dec = () => {
   data.value--
+  emit('update', data.value)
 }
 </script>
