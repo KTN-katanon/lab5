@@ -57,10 +57,10 @@ const linksList: EssentialLinkProps[] = [
     link: 'first-page'
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+    title: 'Pos',
+    caption: 'Point Of Sale',
+    icon: 'coffee',
+    link: 'pos'
   },
   {
     title: 'Discord Chat Channel',

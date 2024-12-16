@@ -1,6 +1,6 @@
 <template>
   <q-card class="my-card">
-    <q-img :src="product.image">
+    <q-img :src="product.image" style="max-height: 100px;">
       <div class="absolute-bottom text-center">
         <div class="text-h6">{{ product.name }}</div>
         <div class="text-subtitle2">{{ product.price }}</div>
@@ -31,6 +31,6 @@ function select() {
 <style lang="scss" scoped>
 .my-card {
   width: 100%;
-  max-width: 250px;
+  max-width: 180px;
 }
 </style>

@@ -11,6 +11,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/FirstPage.vue') }],
   },
+  {
+    path: '/pos',
+    component: () => import('layouts/FullScreen.vue'),
+    children: [{ path: '', component: () => import('pages/POSPage.vue') }],
+  },
 
   // Always leave this as last one,
   // but you can also remove it
