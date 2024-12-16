@@ -51,10 +51,10 @@ import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink
 
 const linksList: EssentialLinkProps[] = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'First Page',
+    caption: 'first page',
+    icon: 'article',
+    link: 'first-page'
   },
   {
     title: 'Github',
