@@ -3,7 +3,7 @@
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
       <q-input
         filled
-        v-model="name"
+        v-model="email"
         label="Your name *"
         hint="Name and surname"
         lazy-rules
@@ -23,7 +23,12 @@
         <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
       </div>
     </q-form>
-    <q-table :columns="columns" :rows="users"></q-table>
+    <q-table :columns="columns" :rows="users">
+      <template v-slot:body-cell-operation="{ row }">
+        <q-btn flat icon="edit" @click="edit(row)"></q-btn
+        ><q-btn flat icon="delete" @click="remove(row)"><template #default> </template></q-btn>
+      </template>
+    </q-table>
   </q-page>
 </template>
 
@@ -38,6 +43,7 @@ const columns: QTableColumn[] = [
     field: 'id',
     label: 'ID',
     align: 'center',
+    sortable: true,
   },
   {
     name: 'email',
@@ -49,6 +55,12 @@ const columns: QTableColumn[] = [
     name: 'password',
     field: 'password',
     label: 'Password',
+    align: 'center',
+  },
+  {
+    name: 'operation',
+    field: 'operation',
+    label: '',
     align: 'center',
   },
 ]
@@ -64,17 +76,34 @@ const users = ref<User[]>([
     password: 'Pass@1234',
   },
 ])
-const name = ref('')
+const id = ref(0)
+const email = ref('')
 const password = ref('')
 let lastUserId = 3
-
-function onSubmit() {
-  users.value.push({id: lastUserId++,email: name.value, password: password.value})
-  onReset()
+function edit(row: User) {
+  id.value = row.id
+  email.value = row.email
+  password.value = row.password
 }
 
+function onSubmit() {
+  if (id.value === 0) {
+    users.value.push({ id: lastUserId++, email: email.value, password: password.value })
+  } else {
+    const index = users.value.findIndex((item) => item.id === id.value)
+    users.value[index]!.id = id.value
+    users.value[index]!.email = email.value
+    users.value[index]!.password = password.value
+  }
+  onReset()
+}
+function remove(row: User) {
+  const index = users.value.findIndex((item) => item.id === row.id)
+  users.value.splice(index, 1)
+}
 function onReset() {
-  name.value = ''
+  id.value = 0
+  email.value = ''
   password.value = ''
 }
 </script>
