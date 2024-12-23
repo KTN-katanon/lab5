@@ -6,7 +6,7 @@
 
         <q-toolbar-title> Quasar App </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div><q-btn icon="logout" @click="authStore.logout"></q-btn></div>
       </q-toolbar>
     </q-header>
 
@@ -27,7 +27,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue'
-
+import { useAuthStore } from 'src/stores/authStore';
+const authStore = useAuthStore()
 const linksList: EssentialLinkProps[] = [
   {
     title: 'First Page',

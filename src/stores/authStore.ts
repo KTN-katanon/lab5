@@ -1,21 +1,44 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useUserStore } from './userStore'
+import { type User } from 'src/models'
+import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 
 export const useAuthStore = defineStore('auth', () => {
-  const isLogin = ref(false)
+  const router = useRouter()
+  const $q = useQuasar()
+  const isLogin = computed(() => {
+    return user.value !== null
+  })
+  const user = ref<User | null>(null)
   const userStore = useUserStore()
+
+  function saveUserToStorage() {
+    // localStorage.setItem('user', JSON.stringify(user.value))
+    $q.localStorage.setItem('user', user.value)
+  }
+  function loadUserToStorage() {
+    user.value = $q.localStorage.getItem('user')
+  }
+  function clearUserFromStorage() {
+    $q.localStorage.removeItem('user')
+  }
   function login(email: string, password: string): boolean {
     const u = userStore.getUserByEmail(email)
     if (u && u.password === password) {
-      isLogin.value = true
+      user.value = { ...u, password: '' }
+      saveUserToStorage()
       return true
     }
     return false
   }
   function logout() {
-    isLogin.value = false
+    router.replace({ path: '/login' })
+    clearUserFromStorage()
+    user.value = null
   }
+  loadUserToStorage()
   return { login, isLogin, logout }
 })
 
