@@ -14,6 +14,18 @@
       "
     ></CounterComponent>
     <CounterComponent :num="4" @update="update2"></CounterComponent>
+    <button
+      @click="
+        router.push({
+          name: 'RoutePage',
+          params: { id: 10, name: 'Hello' },
+          query: { size: 10 },
+          hash: '#abc',
+        })
+      "
+    >
+      Goto Route Page with name
+    </button>
   </q-page>
 </template>
 
@@ -21,8 +33,10 @@
 import CounterComponent from 'src/components/CounterComponent.vue'
 import ProductCard from 'src/components/ProductCard.vue'
 import { type Product } from 'src/models'
-import { useUserStore } from 'src/stores/userStore';
+import { useUserStore } from 'src/stores/userStore'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const userStore = useUserStore()
 const products = ref<Product[]>([
   {
