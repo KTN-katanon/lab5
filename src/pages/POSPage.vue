@@ -1,10 +1,10 @@
 <template>
   <q-page padding style="width: 600px">
     <div>Pos Page</div>
-    <div class="row fullscreen">
+    <div class="row">
       <div class="col-6">
         <q-scroll-area style="height: 100%; max-width: 600px"
-          ><div class="row">
+          ><div class="row full-width">
             <div v-for="p in products" :key="p.id" class="col-4">
               <ProductCard :product="p" @select="select"></ProductCard>
             </div></div
