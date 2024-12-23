@@ -31,7 +31,10 @@ export const useUserStore = defineStore('user', () => {
     })
     users.value.splice(index, 1)
   }
-  return { users, addUser, updateUser, delUser }
+  function getUserByEmail(email:string): User | undefined{
+    return users.value.find((item) => item.email === email)
+  }
+  return { users, addUser, updateUser, delUser, getUserByEmail }
 })
 
 if (import.meta.hot) {

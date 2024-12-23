@@ -26,6 +26,9 @@
           <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
         </div>
       </q-form>
+      <q-list>
+        <q-item v-for="u in userStore.users" :key="u.id">{{ u.email }} {{ u.password }}</q-item>
+      </q-list>
     </div>
   </q-page>
 </template>
@@ -33,11 +36,13 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/authStore'
+import { useUserStore } from 'src/stores/userStore'
 import { ref } from 'vue'
 const $q = useQuasar()
 const email = ref('')
 const password = ref('')
 const authStore = useAuthStore()
+const userStore = useUserStore()
 function onSubmit() {
   if (authStore.login(email.value, password.value)) {
     $q.notify({
