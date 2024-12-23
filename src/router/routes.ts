@@ -4,27 +4,27 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    children: [{ path: '',name: 'RootPage', component: () => import('pages/IndexPage.vue') }],
   },
   {
     path: '/first-page',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/FirstPage.vue') }],
+    children: [{ path: '',name: 'FirstPage', component: () => import('pages/FirstPage.vue') }],
   },
   {
     path: '/pos',
     component: () => import('layouts/FullScreen.vue'),
-    children: [{ path: '', component: () => import('pages/POSPage.vue') }],
+    children: [{ path: '',name: 'PosPage', component: () => import('pages/POSPage.vue') }],
   },
   {
     path: '/login',
     component: () => import('layouts/FullScreen.vue'),
-    children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
+    children: [{ path: '',name: 'LoginPage', component: () => import('pages/LoginPage.vue') }],
   },
   {
     path: '/user-page',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/UserPage.vue') }],
+    children: [{ path: '',name: 'UserPage', component: () => import('pages/UserPage.vue') }],
   },
   {
     path: '/route-page/:id/:name',
