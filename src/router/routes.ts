@@ -5,26 +5,31 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '',name: 'RootPage', component: () => import('pages/IndexPage.vue') }],
+    meta: { requiresAuth: false},
   },
   {
     path: '/first-page',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '',name: 'FirstPage', component: () => import('pages/FirstPage.vue') }],
+    meta: { requiresAuth: false},
   },
   {
     path: '/pos',
     component: () => import('layouts/FullScreen.vue'),
     children: [{ path: '',name: 'PosPage', component: () => import('pages/POSPage.vue') }],
+    meta: { requiresAuth: true},
   },
   {
     path: '/login',
     component: () => import('layouts/FullScreen.vue'),
     children: [{ path: '',name: 'LoginPage', component: () => import('pages/LoginPage.vue') }],
+    meta: { requiresAuth: false},
   },
   {
     path: '/user-page',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '',name: 'UserPage', component: () => import('pages/UserPage.vue') }],
+    meta: { requiresAuth: true,},
   },
   {
     path: '/route-page/:id/:name',

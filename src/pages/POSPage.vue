@@ -12,7 +12,7 @@
       </div>
       <div class="col-6">
         <q-scroll-area style="height: 80vh; max-width: 400px">
-          >
+          
           <table class="q-table">
             <thead>
               <th>id</th>

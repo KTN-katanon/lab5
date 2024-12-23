@@ -38,11 +38,14 @@ import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/authStore'
 import { useUserStore } from 'src/stores/userStore'
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 const $q = useQuasar()
 const email = ref('')
 const password = ref('')
 const authStore = useAuthStore()
 const userStore = useUserStore()
+const route = useRoute()
+const router = useRouter()
 function onSubmit() {
   if (authStore.login(email.value, password.value)) {
     $q.notify({
@@ -51,6 +54,8 @@ function onSubmit() {
       icon: 'cloud_done',
       message: 'Submitted',
     })
+    const redirectTo = route.query.redirect || '/'
+    router.replace(redirectTo.toString())
   } else {
     $q.notify({
       color: 'red-4',
