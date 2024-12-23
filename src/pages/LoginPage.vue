@@ -1,6 +1,7 @@
 <template>
   <q-page padding class="q-pa-md">
     <div style="max-width: 400px" class="fixed-center">
+      {{ authStore.isLogin }}
       <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
         <q-input
           filled
@@ -31,17 +32,28 @@
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
+import { useAuthStore } from 'src/stores/authStore'
 import { ref } from 'vue'
 const $q = useQuasar()
 const email = ref('')
 const password = ref('')
+const authStore = useAuthStore()
 function onSubmit() {
-  $q.notify({
-    color: 'green-4',
-    textColor: 'white',
-    icon: 'cloud_done',
-    message: 'Submitted',
-  })
+  if (authStore.login(email.value, password.value)) {
+    $q.notify({
+      color: 'green-4',
+      textColor: 'white',
+      icon: 'cloud_done',
+      message: 'Submitted',
+    })
+  } else {
+    $q.notify({
+      color: 'red-4',
+      textColor: 'white',
+      icon: 'error',
+      message: 'Error',
+    })
+  }
 }
 
 function onReset() {
