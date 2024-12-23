@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <div>First Page</div>
-
+    <div v-for="u in userStore.users" :key="u.id">{{ u.email }}</div>
     <div v-for="p in products" :key="p.id">
       <ProductCard :product="p" @select="select"></ProductCard>
     </div>
@@ -21,7 +21,9 @@
 import CounterComponent from 'src/components/CounterComponent.vue'
 import ProductCard from 'src/components/ProductCard.vue'
 import { type Product } from 'src/models'
+import { useUserStore } from 'src/stores/userStore';
 import { ref } from 'vue'
+const userStore = useUserStore()
 const products = ref<Product[]>([
   {
     id: 1,
