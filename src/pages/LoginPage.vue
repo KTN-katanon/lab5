@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding class="q-pa-md fixed-center" style="max-width: 400px;">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
       <q-input
         filled
@@ -28,18 +28,22 @@
 </template>
 
 <script setup lang="ts">
-function
+import { useQuasar } from 'quasar'
+import { ref } from 'vue'
+const $q = useQuasar()
+const email = ref('')
+const password = ref('')
+function onSubmit() {
+  $q.notify({
+    color: 'green-4',
+    textColor: 'white',
+    icon: 'cloud_done',
+    message: 'Submitted',
+  })
+}
 
-          $q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: 'Submitted'
-          })
-
-function  onReset () {
-        name.value = null
-        age.value = null
-        accept.value = false
-      }
+function onReset() {
+  email.value = ''
+  password.value = ''
+}
 </script>
