@@ -1,132 +1,122 @@
 <template>
-  <q-page padding style="width: 600px">
-    <div>Pos Page</div>
+  <q-page padding style="width: 100%; max-width: 1200px; margin: auto; background-color: bisque;">
+    <div class="header text-center text-h4" style="padding-bottom: 30px; font-weight: bold;">Point of Sales</div>
     <div class="row">
       <div class="col-6">
-        <q-scroll-area style="height: 100%; max-width: 600px"
-          ><div class="row full-width">
+        <q-scroll-area style="height: 100%; max-width: 600px">
+          <div class="row full-width">
             <div v-for="p in products" :key="p.id" class="col-4">
               <ProductCard :product="p" @select="select"></ProductCard>
-            </div></div
-        ></q-scroll-area>
+            </div>
+          </div>
+        </q-scroll-area>
       </div>
+
       <div class="col-6">
-        <q-scroll-area style="height: 80vh; max-width: 400px">
-          
-          <table class="q-table">
-            <thead>
-              <th>id</th>
-              <th>name</th>
-              <th>price</th>
-              <th>amount</th>
-            </thead>
-            <tbody>
-              <tr v-for="item in productItems" :key="item.id">
-                <td class="text-center">{{ item.id }}</td>
-                <td class="text-center">{{ item.product.name }}</td>
-                <td class="text-center">{{ item.product.price }}</td>
-                <td class="text-center">{{ item.amount }}</td>
-              </tr>
-            </tbody>
-          </table></q-scroll-area>
-         <div class="text-h1">{{ sumPrice }}</div> 
+        <q-card class="q-pa-md shadow-2 order-section">
+          <div class="text-h6 q-mb-md">Order Summary</div>
+          <q-scroll-area style="height: 60vh">
+            <table class="q-table">
+              <thead>
+                <tr>
+                  <th class="text-center">ID</th>
+                  <th class="text-center">Name</th>
+                  <th class="text-center">Price</th>
+                  <th class="text-center">Amount</th>
+                  <th class="text-center">Edit/Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in productItems" :key="item.id">
+                  <td class="text-center">{{ item.id }}</td>
+                  <td class="text-center">{{ item.product.name }}</td>
+                  <td class="text-center">{{ item.product.price }}</td>
+                  <td class="text-center">{{ item.amount }}</td>
+                  <td class="text-center">
+                    <q-btn flat size="15px" padding="xs" icon="edit" @click="edit(item)" />
+                    <q-btn
+                      flat
+                      size="15px"
+                      padding="xs"
+                      icon="delete"
+                      @click="deleteItem(item.id)"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </q-scroll-area>
+
+          <!-- ปุ่มคำนวณราคา -->
+          <q-btn label="Calculate Total" color="primary" @click="calculateTotal" class="q-mt-md" />
+
+          <!-- แสดงราคาเมื่อคำนวณ -->
+          <div v-if="totalPrice !== null" class="text-h5 text-right q-mt-md">
+            Total: ฿{{ totalPrice }}
+          </div>
+
+          <q-btn label="Checkout" color="primary" class="q-mt-lg full-width" size="lg"></q-btn>
+        </q-card>
       </div>
     </div>
+
+    <!-- Edit Dialog -->
+    <q-dialog v-model="editDialogVisible">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Edit Item Quantity</div>
+        </q-card-section>
+        <q-card-section>
+          <q-input v-model="newAmount" label="Enter new amount" type="number" min="1" />
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" @click="editDialogVisible = false" />
+          <q-btn flat label="Save" color="primary" @click="saveEdit" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script setup lang="ts">
 import ProductCard from 'src/components/ProductCard.vue'
-import { type Product } from 'src/models'
-import { computed, ref } from 'vue'
-interface ProductItem {
-  id: number
-  product: Product
-  amount: number
+import { useProductStore } from 'src/stores/productStore'
+import type { ProductItem } from 'src/stores/productStore'
+import { ref } from 'vue'
+
+const productStore = useProductStore()
+const { products, productItems, select, editItem, deleteItem } = productStore
+
+const editDialogVisible = ref(false)
+const newAmount = ref(1)
+const selectedItem = ref<ProductItem | null>(null)
+
+const totalPrice = ref<number | null>(null) // กำหนดตัวแปรเพื่อเก็บผลรวมราคา
+
+// ฟังก์ชันคำนวณราคา
+function calculateTotal() {
+  totalPrice.value = productItems.reduce(
+    (total, item) => total + item.product.price * item.amount,
+    0,
+  )
 }
-let lastProductItemId = 1
-const products = ref<Product[]>([
-  {
-    id: 1,
-    name: 'Coffee 1',
-    price: 20,
-    image: 'product1.png',
-    size: 'ML',
-  },
-  {
-    id: 2,
-    name: 'Coffee 2',
-    price: 20,
-    image: 'product2.png',
-    size: 'ML',
-  },
-  {
-    id: 3,
-    name: 'Coffee 3',
-    price: 20,
-    image: 'product3.png',
-    size: 'ML',
-  },
-  {
-    id: 4,
-    name: 'Coffee 4',
-    price: 20,
-    image: 'product4.png',
-    size: 'ML',
-  },
-  {
-    id: 5,
-    name: 'Coffee 5',
-    price: 20,
-    image: 'product5.png',
-    size: 'ML',
-  },
-  {
-    id: 6,
-    name: 'Coffee 6',
-    price: 20,
-    image: 'product6.png',
-    size: 'ML',
-  },
-  {
-    id: 7,
-    name: 'Coffee 7',
-    price: 20,
-    image: 'product7.png',
-    size: 'ML',
-  },
-  {
-    id: 8,
-    name: 'Coffee 8',
-    price: 20,
-    image: 'product8.png',
-    size: 'ML',
-  },
-  {
-    id: 9,
-    name: 'Coffee 9',
-    price: 20,
-    image: 'product9.png',
-    size: 'ML',
-  },
-  {
-    id: 10,
-    name: 'Coffee 10',
-    price: 20,
-    image: 'product10.png',
-    size: 'ML',
-  },
-])
-const productItems = ref<ProductItem[]>([])
-function select(product: Product) {
-  console.log(product)
-  productItems.value.push({ id: lastProductItemId++, product: product, amount: 1 })
+
+// Edit item quantity
+function edit(item: ProductItem) {
+  selectedItem.value = item
+  newAmount.value = item.amount
+  editDialogVisible.value = true
 }
-const sumPrice = computed(() =>{
-  let sum = 0
-  for(let i=0;i<productItems.value.length;i++) {
-    sum = sum + productItems.value[i]!.product.price
+
+// Save edited item
+function saveEdit() {
+  if (selectedItem.value) {
+    const newAmountValue = newAmount.value
+    if (newAmountValue > 0) {
+      editItem(selectedItem.value.id, newAmountValue)
+    }
   }
-  return sum
-})
+  selectedItem.value = null // Clear selected item after editing
+  editDialogVisible.value = false
+}
 </script>
